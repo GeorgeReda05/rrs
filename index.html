@@ -51,33 +51,59 @@
     <g transform="translate(0,0)" id="main-group">
       <image href="image/1.png" width="1024" id="base-image"/>
 
-      <a href="micro/1.pdf" target="_blank"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>
+      <a href="micro/1.pdf" onclick="openLink(event)"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>
 
-      <a href="patho/1.pdf" target="_blank"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
+      <a href="patho/1.pdf" onclick="openLink(event)"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
 
-      <a href="patho/q1.pdf" target="_blank"><rect x="368" y="1339" width="115" height="125" id="red" class="image-mapper-shape"/></a>
+      <a href="patho/q1.pdf" onclick="openLink(event)"><rect x="368" y="1339" width="115" height="125" id="red" class="image-mapper-shape"/></a>
 
-      <a href="physio/2.pdf" target="_blank"><rect x="368" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
+      <a href="physio/2.pdf" onclick="openLink(event)"><rect x="368" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
 
-      <a href="anatomy/1.pdf" target="_blank"><rect x="368" y="1845" width="115" height="380" class="image-mapper-shape"/></a>
+      <a href="anatomy/1.pdf" onclick="openLink(event)"><rect x="368" y="1845" width="115" height="380" class="image-mapper-shape"/></a>
 
-      <a href="physio/1.pdf" target="_blank"><rect x="598" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>
+      <a href="physio/1.pdf" onclick="openLink(event)"><rect x="598" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>
 
-      <a href="histo/1.pdf" target="_blank"><rect x="712.35" y="702" width="115" height="380" class="image-mapper-shape"/></a>
+      <a href="histo/1.pdf" onclick="openLink(event)"><rect x="712.35" y="702" width="115" height="380" class="image-mapper-shape"/></a>
 
-      <a href="anatomy/2.pdf" target="_blank"><rect x="712.35" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
+      <a href="anatomy/2.pdf" onclick="openLink(event)"><rect x="712.35" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
 
-      <a href="physio/2.pdf" target="_blank"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
+      <a href="physio/2.pdf" onclick="openLink(event)"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
 
-       <a href="physio/q/1.pdf" target="_blank"><rect x="598" y="2100" width="115" height="127"id="red" class="image-mapper-shape"/></a>
+       <a href="physio/q/1.pdf" onclick="openLink(event)"><rect x="598" y="2100" width="115" height="127"id="red" class="image-mapper-shape"/></a>
 
 </g>  
     <script>
+      
+      // 🟢 الدالة الجديدة اللي بتفتح الرابط حسب نوع الجهاز
+      function openLink(event) {
+        // نمنع الفتح التلقائي للرابط
+        event.preventDefault(); 
+        const url = event.currentTarget.getAttribute('href');
+
+        // فحص الـ User Agent لمعرفة إذا كان الجهاز موبايل (صغير)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent) || (window.innerWidth <= 768);
+
+        if (isMobile) {
+          // لو موبايل (أو شاشة صغيرة): افتح في نفس النافذة
+          window.location.href = url;
+        } else {
+          // لو كمبيوتر (أو شاشة كبيرة): افتح في تاب جديدة
+          window.open(url, '_blank');
+        }
+        
+        // لو كنا في حالة الـ Touch (لمس)، نوقف الـ Hover عشان الرابط يفتح بسرعة
+        const targetRect = event.currentTarget.querySelector('.image-mapper-shape');
+        if(event.type === 'touchstart' && targetRect) {
+            // عشان نضمن إن أي حالة hover سابقة توقفت عشان الرابط يفتح
+            targetRect.dispatchEvent(new Event('touchend')); 
+        }
+      }
+
       const mainGroup = document.getElementById('main-group');
       const clipDefs = document.getElementById('clip-defs');
       let activeHover = null; 
       const ORIGINAL_IMAGE_HEIGHT = 2454;
-      const IMAGE_SRC = document.getElementById('base-image').getAttribute('href'); // جلب مصدر الصورة تلقائياً
+      const IMAGE_SRC = document.getElementById('base-image').getAttribute('href'); 
 
       function attachHover(rect, i) {
         // متغيرات داخلية خاصة بالـ rect ده بس
@@ -102,9 +128,12 @@
           }
           if(activeHover === rect) return;
           startHover();
+          
+          // 🛑 هنا بنمنع الفتح التلقائي للرابط عشان دالة openLink هي اللي تقوم بالفتح
+          e.preventDefault(); 
         });
 
-        // 🛑 عند رفع الإصبع، بيتوقف الهافر وبيسمح للرابط يفتح
+        // 🛑 عند رفع الإصبع، بيتوقف الهافر
         rect.addEventListener('touchend', stopHover);
 
         function startHover() {
