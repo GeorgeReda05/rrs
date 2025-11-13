@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta property="og:title" content=" ">
+  <meta property="og:description" content=" ">
+  <meta property="og:image" content=" ">
+
   <style>
 
     html, body {
@@ -55,7 +60,7 @@
       <a href="histo/1.pdf" target="_blank"><rect x="712.35" y="702" width="115" height="380" class="image-mapper-shape"/></a>
       <a href="#" target="_blank"><rect x="712.35" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
       <a href="physio/2.pdf" target="_blank"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
-       <a href="<a href="physio/q/1.pdf" target="_blank"><rect x="598" y="2100" width="115" height="127"id="red" class="image-mapper-shape"/></a>
+       <a href="physio/q/1.pdf" target="_blank"><rect x="598" y="2100" width="115" height="127"id="red" class="image-mapper-shape"/></a>
 </g>  
     <script>
       const mainGroup = document.getElementById('main-group');
@@ -77,7 +82,7 @@
         // 🛑 أحداث الماوس
         rect.addEventListener('mouseover', startHover);
         rect.addEventListener('mouseout', stopHover);
-        
+
         // 🛑 أحداث اللمس
         rect.addEventListener('touchstart', (e) => {
           // 🛑 إيقاف الهافر الحالي لو كان شغال على عنصر تاني
@@ -88,19 +93,19 @@
           if(activeHover === rect) return;
           startHover();
         });
-        
+
         // 🛑 عند رفع الإصبع، بيتوقف الهافر وبيسمح للرابط يفتح
         rect.addEventListener('touchend', stopHover);
 
         function startHover() {
-          
+
           if(activeHover === rect) return;
-            
+
           // تنظيف أي بقايا من محاولات سابقة على نفس العنصر
           stopHover({target: rect}); 
 
           activeHover = rect;
-          
+
           const x = parseFloat(rect.getAttribute('x'));
           const y = parseFloat(rect.getAttribute('y'));
           const width = parseFloat(rect.getAttribute('width'));
@@ -148,7 +153,7 @@
         function stopHover(e) {
           // تحديد العنصر المستهدف للإيقاف. 
           const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;
-          
+
           if(!targetRect) return;
 
           // ** التأكد من أننا بنوقف الهافر اللي يخص المتغيرات دي
@@ -165,13 +170,13 @@
           // إعادة التعيين
           rect.style.transform = 'scale(1)';
           rect.style.filter = 'none';
-          
+
           // إزالة الـ zoom part والـ clip path
           if(zoomPart){ zoomPart.remove(); zoomPart = null; }
-          
+
           const currentClip = document.getElementById(clipPathId);
           if(currentClip) currentClip.remove();
-          
+
           // 🛑 مسح الـ activeHover لو كان هو العنصر ده
           if(activeHover === rect) {
               activeHover = null;
