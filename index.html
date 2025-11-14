@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta property="og:title" content=" ">
-  <meta property="og:description" content=" ">
-  <meta property="og:image" content=" ">
-
   <style>
     html, body {
       margin: 0;
@@ -35,7 +31,7 @@
       transition: transform 0.3s ease, filter 0.3s ease;
     }
     .image-mapper-shape#red { stroke: red; }
-.image-mapper-shape#blue { stroke: blue; }
+    .image-mapper-shape#blue { stroke: blue; }
     .zoom-part {
       pointer-events: none;
       transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
@@ -64,37 +60,37 @@
       <a href="physio/2.pdf"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
       <a href="physio/q/1.pdf"><rect x="598" y="2100" width="115" height="127" id="red" class="image-mapper-shape"/></a>
     </g>
-  <g transform="translate(1024,0)"
- 
-<image xlink:href="2.png" style="width: 1024px;"></image>
-<a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
-<rect x="137.688139619883" y="477.14605263157887" width="115.00860745614034" height="257.49707602339174" id="blue" class="image-mapper-shape"/></a>
+    
+    <g transform="translate(1024,0)" id="secondary-group">
+      <image xlink:href="2.png" width="1024" id="secondary-image" preserveAspectRatio="xMidYMid meet"/>
+      <a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
+      <rect x="137.688139619883" y="477.14605263157887" width="115.00860745614034" height="257.49707602339174" id="blue" class="image-mapper-shape"/></a>
 
-<a xlink:href="pharma/1.pdf"
-<rect x="137.91991959064327" y="875.84649122807" width="114.8274488304094" height="469.8491228070176" class="image-mapper-shape" data-index="2"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="137.72317251461988" y="1827.9460526315788" width="115.11458333333331" height="431.385964912281" class="image-mapper-shape" data-index="3"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="367.910745614035" y="1344.915497076024" width="115.7188596491228" height="482.88011695906425" class="image-mapper-shape" data-index="4"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="483.5782894736842" y="1104.3466374269003" width="114.13428362573097" height="361.9701754385967" class="image-mapper-shape" data-index="5"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="597.5236842105263" y="1465.724707602339" width="114.63859649122799" height="362.65745614035086" class="image-mapper-shape" data-index="6"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="711.6490497076023" y="477.07792397660813" width="114.72726608187133" height="377.8353801169589" class="image-mapper-shape" data-index="7"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="137.73099415204678" y="348.51929824561404" width="114.48750000000001" height="129.10818713450294" class="image-mapper-shape" data-index="8"></rect>
-</a>
-<a xlink:href="#" target="---" xlink:title="">
-<rect x="712.5633040935672" y="1345.1815789473683" width="114.0740497076024" height="482.9260233918128" class="image-mapper-shape" data-index="9"></rect>
-</a>
-</g>
+      <a xlink:href="pharma/1.pdf">
+      <rect x="137.91991959064327" y="875.84649122807" width="114.8274488304094" height="469.8491228070176" class="image-mapper-shape" data-index="2"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="137.72317251461988" y="1827.9460526315788" width="115.11458333333331" height="431.385964912281" class="image-mapper-shape" data-index="3"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="367.910745614035" y="1344.915497076024" width="115.7188596491228" height="482.88011695906425" class="image-mapper-shape" data-index="4"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="483.5782894736842" y="1104.3466374269003" width="114.13428362573097" height="361.9701754385967" class="image-mapper-shape" data-index="5"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="597.5236842105263" y="1465.724707602339" width="114.63859649122799" height="362.65745614035086" class="image-mapper-shape" data-index="6"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="711.6490497076023" y="477.07792397660813" width="114.72726608187133" height="377.8353801169589" class="image-mapper-shape" data-index="7"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="137.73099415204678" y="348.51929824561404" width="114.48750000000001" height="129.10818713450294" class="image-mapper-shape" data-index="8"></rect>
+      </a>
+      <a xlink:href="#">
+      <rect x="712.5633040935672" y="1345.1815789473683" width="114.0740497076024" height="482.9260233918128" class="image-mapper-shape" data-index="9"></rect>
+      </a>
+    </g>
  </svg>
 
   <script>
@@ -103,25 +99,31 @@
 
     // ✅ ضبط طريقة فتح الروابط
     document.querySelectorAll('a').forEach(a => {
-      if (isMobile) {
-        a.removeAttribute('target'); // نفس النافذة
-      } else {
-        a.setAttribute('target', '_blank'); // نافذة جديدة
+      // حذف أي target قديم كان موجود عشان الكود يتحكم فيه بالكامل
+      a.removeAttribute('target');
+      
+      if (!isMobile) {
+        a.setAttribute('target', '_blank'); // نافذة جديدة على الديسكتوب
       }
     });
 
-    const mainGroup = document.getElementById('main-group');
     const clipDefs = document.getElementById('clip-defs');
     let activeHover = null;
     const ORIGINAL_IMAGE_HEIGHT = 2454;
-    const IMAGE_SRC = document.getElementById('base-image').getAttribute('href');
-
+    
     function attachHover(rect, i) {
       let zoomPart = null;
       let animationId = null;
       const clipPathId = `clip-${i}`;
       const scale = 1.1;
       rect.setAttribute('data-index', i);
+
+      // 🌟 تحديد الجروب الأصلي ومصدر الصورة لكل مستطيل
+      const parentGroup = rect.closest('g');
+      const baseImage = parentGroup ? parentGroup.querySelector('image') : null;
+      if (!baseImage) return; // لو مفيش صورة أساسية، نوقف
+      const IMAGE_SRC = baseImage.getAttribute('href');
+
 
       rect.addEventListener('mouseover', startHover);
       rect.addEventListener('mouseout', stopHover);
@@ -152,14 +154,16 @@
         clipDefs.appendChild(clip).appendChild(clipRect);
 
         zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');
-        zoomPart.setAttribute('href', IMAGE_SRC);
+        zoomPart.setAttribute('href', IMAGE_SRC); // استخدام مصدر الصورة اللي جيبناه
         zoomPart.setAttribute('width','1024');
         zoomPart.setAttribute('height', ORIGINAL_IMAGE_HEIGHT);
         zoomPart.setAttribute('class','zoom-part');
         zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);
         zoomPart.style.transformOrigin = `${x + width/2}px ${y + height/2}px`;
         zoomPart.style.opacity = 0;
-        mainGroup.appendChild(zoomPart);
+        
+        // 🌟 إضافة الجزء المزوم للجروب الخاص بيه
+        parentGroup.appendChild(zoomPart); 
 
         rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`;
         rect.style.transform = `scale(${scale})`;
@@ -193,9 +197,13 @@
         if(activeHover === rect) activeHover = null;
       }
     }
+    
+    // 🌟 تطبيق الـhover على كل الجروبات اللي فيها شغل
+    document.querySelectorAll('#main-group, #secondary-group').forEach(group => {
+      group.querySelectorAll('.image-mapper-shape').forEach((rect, i) => attachHover(rect, i));
+    });
 
-    mainGroup.querySelectorAll('.image-mapper-shape').forEach((rect, i) => attachHover(rect, i));
-
+    // 🌟 ملاحظة: الـobserver لسه بيراقب main-group بس. لو في إضافة ديناميكية للـsecondary-group حنحتاج نعدله
     const observer = new MutationObserver(mutations => {
       mutations.forEach(mutation => {
         mutation.addedNodes.forEach((node, i) => {
@@ -206,7 +214,7 @@
         });
       });
     });
-    observer.observe(mainGroup,{childList:true, subtree:true});
+    observer.observe(document.getElementById('main-group'),{childList:true, subtree:true});
   </script>
 </body>
 </html>
