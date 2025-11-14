@@ -71,11 +71,12 @@
     <g transform="translate(1024,0)" id="secondary-group">
       <image xlink:href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMidYMid meet"/>
       
-<a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
-      <rect x="137.73099415204678" y="348.2036549707604" width="115.39897660818713" height="128.4653508771928"  class="image-mapper-shape blue-stroke"/>
+      <a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
+      <rect x="137.73099415204678" y="348.2036549707604" width="115.39897660818713" height="128.4653508771928" class="image-mapper-shape blue-stroke"/>
       </a>
+      
       <a xlink:href="pharma/1.pdf">
-     <rect x="137.7824195906433" y="477.00350877192994" width="114.69828216374268" height="257.3026315789471" class="image-mapper-shape" data-index="2"></rect>
+      <rect x="137.7824195906433" y="477.00350877192994" width="114.69828216374268" height="257.3026315789471" class="image-mapper-shape" data-index="2"></rect>
       </a>
       <a xlink:href="#">
       <rect x="137.72317251461988" y="1827.9460526315788" width="115.11458333333331" height="431.385964912281" class="image-mapper-shape" data-index="3"></rect>
@@ -172,7 +173,6 @@
         rect.addEventListener('touchstart', startHover);
         
         rect.addEventListener('touchend', (e) => {
-             // عشان الهافر يتقفل مباشرة بعد ما الرابط يفتح في الموبايل
              cleanupHover(); 
         });
 
@@ -268,7 +268,6 @@
           if (isMobile) {
             link.removeAttribute('target');
           } else {
-            // تصحيح: تحديد الـ target لـ _blank بغض النظر عن حالتها الأصلية
             link.setAttribute('target', '_blank'); 
           }
         });
