@@ -52,7 +52,7 @@
        preserveAspectRatio="xMidYMid meet"
        id="main-svg"> 
     <defs id="clip-defs"></defs>
-    
+
     <g transform="translate(0,0)" id="main-group">
       <image href="image/1.png" width="1024" height="2454" id="base-image"/>
 
@@ -70,9 +70,10 @@
 
     <g transform="translate(1024,0)" id="secondary-group">
       <image xlink:href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMidYMid meet"/>
-      <a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing"id="blue" class="image-mapper-shape"/></a>>
-      <rect x="137.688139619883" y="477.14605263157887" width="115.00860745614034" height="257.49707602339174" class="image-mapper-shape"/></a>
-
+      
+      <a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
+      <rect x="137.688139619883" y="477.14605263157887" width="115.00860745614034" height="257.49707602339174" id="blue" class="image-mapper-shape"/>
+      </a>
       <a xlink:href="pharma/1.pdf">
       <rect x="137.91991959064327" y="875.84649122807" width="114.8274488304094" height="469.8491228070176" class="image-mapper-shape" data-index="2"></rect>
       </a>
@@ -143,7 +144,8 @@
         let animationId = null;
         const clipPathId = `clip-${i}`;
         const scale = 1.1;
-        const parentGroup = rect.closest('g'); // تحديد الجروب الأب
+        // نستخدم closest عشان لو الـ rect جوه a والـ a جوه g
+        const parentGroup = rect.closest('g'); 
 
         // 🛑 لازم يكون فيه صورة في الجروب عشان التأثير يشتغل
         const imageData = getGroupImage(parentGroup);
@@ -156,6 +158,7 @@
         // ... أحداث الماوس واللمس
         rect.addEventListener('mouseover', startHover);
         rect.addEventListener('mouseout', stopHover);
+        // تم إضافة معالجة بسيطة لأحداث اللمس (touch)
         rect.addEventListener('touchstart', (e) => {
             if(activeHover && activeHover !== rect) {
                 stopHover({target: activeHover});
@@ -167,7 +170,11 @@
 
         function startHover() {
           if(activeHover === rect) return;
-          stopHover({target: rect}); 
+          // إيقاف أي hover نشط سابق لو كان مختلف
+          if (activeHover) {
+              const prevRect = activeHover;
+              stopHover({target: prevRect});
+          }
           activeHover = rect;
 
           // الإحداثيات هنا نسبية للجروب
@@ -229,10 +236,11 @@
         }
 
         function stopHover(e) {
+          // محاولة تحديد المستطيل الهدف سواء كان هو نفسه أو جوه رابط
           const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;
 
+          // لو الهدف مش هو المستطيل الحالي، نوقف العملية
           if(!targetRect || targetRect !== rect) {
-              if(activeHover === targetRect) activeHover = null; 
               return; 
           }
 
@@ -261,6 +269,7 @@
           const observer = new MutationObserver(mutations => {
             mutations.forEach(mutation => {
               mutation.addedNodes.forEach((node, i) => {
+                // التأكد من أن العنصر المضاف هو رابط ويحتوي على rect
                 if(node.tagName==='A'){
                   const rect = node.querySelector('rect.image-mapper-shape');
                   if(rect) attachHover(rect, Date.now()+i);
