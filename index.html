@@ -36,7 +36,7 @@
       transition: transform 0.3s ease, filter 0.3s ease;
     }
     .image-mapper-shape#red { stroke: red; }
-.image-mapper-shape#blue { stroke: blue; }
+    .image-mapper-shape#blue { stroke: blue; }
 
     .zoom-part {
       pointer-events: none;
@@ -103,7 +103,7 @@
       const mainSvg = document.getElementById('main-svg');
       const clipDefs = document.getElementById('clip-defs');
       let activeHover = null;
-      
+
       // 🛠️ جلب كل الـ groups اللي فيها تحويل (كل الـ <g>)
       const groups = document.querySelectorAll('g'); 
 
@@ -113,23 +113,27 @@
       function getTransformX(groupElement) {
           const transformAttr = groupElement.getAttribute('transform');
           if (!transformAttr) return 0;
-          
+
           // البحث عن قيمة الـ translate(X, Y)
-          const match = transformAttr.match(/translate\(\s*([\d.]+)\s*,/);
+          // تم تعديل الـ regex ليكون أكثر مرونة مع المسافات والأرقام العشرية
+          const match = transformAttr.match(/translate\(\s*([\d\.-]+)\s*,/);
           return match ? parseFloat(match[1]) : 0;
       }
-      
+
       /**
        * 🛠️ دالة مساعدة لوجود صورة داخل الجروب وتحديد خصائصها.
        */
       function getGroupImage(parentGroup) {
           const baseImage = parentGroup.querySelector('image');
           if (!baseImage) return null;
-          
+
           const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');
           const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));
           const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));
-          
+
+          // التأكد من أن الأبعاد صالحة قبل الإرجاع
+          if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;
+
           return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };
       }
 
@@ -140,7 +144,7 @@
         const clipPathId = `clip-${i}`;
         const scale = 1.1;
         const parentGroup = rect.closest('g'); // تحديد الجروب الأب
-        
+
         // 🛑 لازم يكون فيه صورة في الجروب عشان التأثير يشتغل
         const imageData = getGroupImage(parentGroup);
         if (!imageData) return; 
@@ -172,7 +176,7 @@
           const width = parseFloat(rect.getAttribute('width'));
           const height = parseFloat(rect.getAttribute('height'));
 
-          // الإحداثيات المطلقة بالنسبة للـ SVG
+          // 🛠️ الإحداثيات المطلقة بالنسبة للـ SVG
           const absoluteX = x + groupOffsetX;
           const absoluteY = y; 
 
@@ -189,7 +193,7 @@
 
           // 2. إنشاء الجزء المكبر
           zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');
-          
+
           zoomPart.setAttribute('href', imageData.src);
           zoomPart.setAttribute('width', imageData.width);
           zoomPart.setAttribute('height', imageData.height);
@@ -199,11 +203,11 @@
           // 🛠️ ضبط إحداثيات الصورة المكبرة (تبدأ من إحداثيات الجروب الأب المطلقة)
           zoomPart.setAttribute('x', groupOffsetX); 
           zoomPart.setAttribute('y', 0); 
-          
+
           // تحديد مركز التحويل ليكون مركز المستطيل المطلق
           zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;
           zoomPart.style.opacity = 0;
-          
+
           // إضافة الجزء المزوم مباشرة للـ SVG الرئيسي
           mainSvg.appendChild(zoomPart);
 
@@ -248,11 +252,11 @@
           }
         }
       }
-      
+
       // 🛠️ نطبق الـ attachHover على كل المستطيلات في كل الجروبات الموجودة
       groups.forEach(group => {
           group.querySelectorAll('.image-mapper-shape').forEach((rect, i) => attachHover(rect, i));
-          
+
           // 🛠️ نراقب الجروب عشان لو أضيفت مستطيلات جديدة ديناميكياً
           const observer = new MutationObserver(mutations => {
             mutations.forEach(mutation => {
@@ -266,7 +270,7 @@
           });
           observer.observe(group,{childList:true, subtree:true});
       });
-      
+
     </script>
 </body>
 </html>
