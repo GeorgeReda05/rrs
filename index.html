@@ -111,20 +111,18 @@
 
       const groups = document.querySelectorAll('g'); 
 
-      // 🔄 دالة محسّنة لقراءة الإزاحة الأفقية (X)
+      // دالة محسّنة لقراءة الإزاحة الأفقية (X)
       function getTransformX(groupElement) {
           const transformAttr = groupElement.getAttribute('transform');
           if (!transformAttr) return 0;
-          // قراءة الـ X من translate(X, Y)
           const match = transformAttr.match(/translate\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
           return match ? parseFloat(match[1]) : 0;
       }
 
-      // 🆕 دالة جديدة لقراءة الإزاحة الرأسية (Y)
+      // دالة جديدة لقراءة الإزاحة الرأسية (Y)
       function getTransformY(groupElement) {
           const transformAttr = groupElement.getAttribute('transform');
           if (!transformAttr) return 0;
-          // قراءة الـ Y من translate(X, Y)
           const match = transformAttr.match(/translate\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
           return match ? parseFloat(match[2]) : 0;
       }
@@ -164,6 +162,8 @@
 
 
       function attachHover(rect, i) {
+        
+        const anchor = rect.closest('a'); // 🆕 إمساك وسم الـ <a>
 
         const clipPathId = `clip-${i}-${Date.now()}`;
         const scale = 1.1;
@@ -173,7 +173,7 @@
         if (!imageData) return; 
 
         const groupOffsetX = getTransformX(parentGroup);
-        const groupOffsetY = getTransformY(parentGroup); // 🔄 جلب الإزاحة الرأسية
+        const groupOffsetY = getTransformY(parentGroup); 
 
         rect.setAttribute('data-index', i);
 
@@ -181,10 +181,15 @@
         rect.addEventListener('mouseout', stopHover);
 
         rect.addEventListener('touchstart', startHover);
-
         rect.addEventListener('touchend', (e) => {
              cleanupHover(); 
         });
+
+        // 🆕 إيقاف الهافر عند الضغط على الرابط (قبل فتح الرابط)
+        if (anchor) {
+            anchor.addEventListener('click', cleanupHover);
+        }
+        // ----------------------------------------------------
 
         function startHover() {
           if(activeState.rect === rect) return;
@@ -199,7 +204,7 @@
           const width = parseFloat(rect.getAttribute('width'));
           const height = parseFloat(rect.getAttribute('height'));
 
-          // 🔄 حساب الإحداثيات المطلقة باستخدام Y الإزاحة
+          // حساب الإحداثيات المطلقة
           const absoluteX = x + groupOffsetX;
           const absoluteY = y + groupOffsetY; 
 
@@ -221,7 +226,7 @@
           zoomPart.setAttribute('class','zoom-part');
           zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);
 
-          // 🔄 وضع الصورة المقطوعة في مكانها الصحيح باستخدام X و Y الإزاحة
+          // وضع الصورة المقطوعة في مكانها الصحيح
           zoomPart.setAttribute('x', groupOffsetX); 
           zoomPart.setAttribute('y', groupOffsetY); 
 
