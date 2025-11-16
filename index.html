@@ -3,40 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-      html, body {
+  <style>
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: black;
-      height: 100vh;
-      overflow: auto;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;}
-
-    svg {display: block;
-      max-width: 100vw;
-      height: 100%;
-      width: auto;}
-
-    .image-mapper-shape {
-      fill: transparent;
-      stroke: yellow; 
-      stroke-width: 2px;
-      transform-origin: center center;
-      transition: transform 0.3s ease, filter 0.3s ease;}
-    .q { stroke: red; } 
-    .v { stroke: blue; } 
-    .ipc {stroke: white;} 
-    .o {stroke: #80CBC4;} 
-    .a {stroke: #F48FB1;} 
-    .zoom-part {pointer-events: none;
+      width: 100vw;
+      height: 100svh;   /* استخدم svh للمحافظة على ظهور كامل الصورة */
+      overflow-x: auto;
+      overflow-y: hidden;
+      background: black;
+    }
+    body {
+      width: 100vw;
+      height: 100svh;
+      display: block;
+    }
+    #main-svg {
+      width: calc(4 * 1024px);
+      height: 100svh;
+      max-height: 100svh;
+      min-height: 100svh;
+      display: block;
+      background: black;
+    }
+    .image-mapper-shape {  
+      fill: transparent;  
+      stroke: yellow;   
+      stroke-width: 2px;  
+      transform-origin: center center;  
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .q { stroke: red; }
+    .v { stroke: blue; }
+    .ipc {stroke: white;}
+    .o {stroke: #80CBC4;}
+    .a {stroke: #F48FB1;}
+    .zoom-part {
+      pointer-events: none;
       transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-      image-rendering: auto;}
+      image-rendering: auto;
+    }
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg"
+   <svg xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink"
        viewBox="0 0 2048 2454"
        preserveAspectRatio="xMidYMid meet"
@@ -95,195 +105,201 @@
       <rect x="712.5633040935672" y="1345.1815789473683" width="114.0740497076024" height="482.9260233918128" class="image-mapper-shape" data-index="9"></rect>
       </a>
     </g>
+  </svg>
+<script>
+  // ===== وضع تصحيح ارتفاع svg ليملأ المساحة الفعلية المتبقية =====
+  function fixSVGHeight() {
+    var h = window.innerHeight;
+    document.getElementById('main-svg').style.height = h + 'px';
+  }
+  window.addEventListener('resize', fixSVGHeight);
+  window.addEventListener('DOMContentLoaded', fixSVGHeight);
 
-    <script>
-      const mainSvg = document.getElementById('main-svg');
-      const clipDefs = document.getElementById('clip-defs');
+  // ============ كودك الأصلي المعدل فقط ===========
+  const mainSvg = document.getElementById('main-svg');
+  const clipDefs = document.getElementById('clip-defs');
 
-      const activeState = {
-          rect: null,
-          zoomPart: null,
-          animationId: null,
-          clipPathId: null
-      };
+  const activeState = {
+      rect: null,
+      zoomPart: null,
+      animationId: null,
+      clipPathId: null
+  };
 
-      const groups = document.querySelectorAll('g'); 
+  const groups = document.querySelectorAll('g');
 
-      function getTransformX(groupElement) {
-          const transformAttr = groupElement.getAttribute('transform');
-          if (!transformAttr) return 0;
-          const match = transformAttr.match(/translate\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
-          return match ? parseFloat(match[1]) : 0;
+  function getTransformX(groupElement) {
+      const transformAttr = groupElement.getAttribute('transform');
+      if (!transformAttr) return 0;
+      const match = transformAttr.match(/translate\s*\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
+      return match ? parseFloat(match[1]) : 0;
+  }
+
+  function getTransformY(groupElement) {
+      const transformAttr = groupElement.getAttribute('transform');
+      if (!transformAttr) return 0;
+      const match = transformAttr.match(/translate\s*\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
+      return match ? parseFloat(match[2]) : 0;
+  }
+
+  function getGroupImage(parentGroup) {
+      const baseImage = parentGroup.querySelector('image');
+      if (!baseImage) return null;
+
+      const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');
+      const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));
+      const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));
+
+      if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;
+
+      return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };
+  }
+
+  function cleanupHover() {
+    if (!activeState.rect) return;
+
+    if(activeState.animationId) clearInterval(activeState.animationId);
+
+    activeState.rect.style.transform = 'scale(1)';
+    activeState.rect.style.filter = 'none';
+
+    if(activeState.zoomPart){ activeState.zoomPart.remove(); }
+
+    const currentClip = document.getElementById(activeState.clipPathId);
+    if(currentClip) currentClip.remove();
+
+    activeState.rect = null;
+    activeState.zoomPart = null;
+    activeState.animationId = null;
+    activeState.clipPathId = null;
+  }
+
+  function attachHover(rect, i) {
+
+    const anchor = rect.closest('a');
+
+    const clipPathId = `clip-${i}-${Date.now()}`;
+    const scale = 1.1;
+    const parentGroup = rect.closest('g');
+
+    const imageData = getGroupImage(parentGroup);
+    if (!imageData) return;
+
+    const groupOffsetX = getTransformX(parentGroup);
+    const groupOffsetY = getTransformY(parentGroup);
+
+    rect.setAttribute('data-index', i);
+
+    rect.addEventListener('mouseover', startHover);
+    rect.addEventListener('mouseout', stopHover);
+
+    rect.addEventListener('touchstart', startHover);
+
+    rect.addEventListener('touchend', cleanupHover);
+
+    if (anchor) {
+        anchor.removeEventListener('click', cleanupHover);
+    }
+
+    function startHover() {
+      if(activeState.rect === rect) return;
+
+      cleanupHover();
+
+      activeState.rect = rect;
+      activeState.clipPathId = clipPathId;
+
+      const x = parseFloat(rect.getAttribute('x'));
+      const y = parseFloat(rect.getAttribute('y'));
+      const width = parseFloat(rect.getAttribute('width'));
+      const height = parseFloat(rect.getAttribute('height'));
+
+      const absoluteX = x + groupOffsetX;
+      const absoluteY = y + groupOffsetY;
+
+      let clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');
+      clip.setAttribute('id', clipPathId);
+      let clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      clipRect.setAttribute('x', absoluteX);
+      clipRect.setAttribute('y', absoluteY);
+      clipRect.setAttribute('width', width);
+      clipRect.setAttribute('height', height);
+      clipDefs.appendChild(clip).appendChild(clipRect);
+
+      const zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');
+
+      zoomPart.setAttribute('href', imageData.src);
+      zoomPart.setAttribute('width', imageData.width);
+      zoomPart.setAttribute('height', imageData.height);
+      zoomPart.setAttribute('class','zoom-part');
+      zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);
+
+      zoomPart.setAttribute('x', groupOffsetX);
+      zoomPart.setAttribute('y', groupOffsetY);
+
+      zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;
+      zoomPart.style.opacity = 0;
+
+      mainSvg.appendChild(zoomPart);
+      activeState.zoomPart = zoomPart;
+
+      rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`;
+      rect.style.transform = `scale(${scale})`;
+      zoomPart.style.transform = `scale(${scale})`;
+      zoomPart.style.opacity = 1;
+
+      let hue = 0;
+      const animationId = setInterval(() => {
+        hue = (hue + 1) % 360;
+        const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;
+        rect.style.filter = glow;
+        if(zoomPart) zoomPart.style.filter = glow;
+      }, 100);
+      activeState.animationId = animationId;
+    }
+
+    function stopHover(e) {
+      const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;
+
+      if(targetRect === activeState.rect && e.type === 'mouseout'){
+          cleanupHover();
       }
+    }
+  }
 
-      function getTransformY(groupElement) {
-          const transformAttr = groupElement.getAttribute('transform');
-          if (!transformAttr) return 0;
-          const match = transformAttr.match(/translate\(\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
-          return match ? parseFloat(match[2]) : 0;
-      }
-
-      function getGroupImage(parentGroup) {
-          const baseImage = parentGroup.querySelector('image');
-          if (!baseImage) return null;
-
-          const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');
-          const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));
-          const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));
-
-          if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;
-
-          return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };
-      }
-
-      function cleanupHover() {
-        if (!activeState.rect) return;
-
-        if(activeState.animationId) clearInterval(activeState.animationId);
-
-        activeState.rect.style.transform = 'scale(1)';
-        activeState.rect.style.filter = 'none';
-
-        if(activeState.zoomPart){ activeState.zoomPart.remove(); }
-
-        const currentClip = document.getElementById(activeState.clipPathId);
-        if(currentClip) currentClip.remove();
-
-        activeState.rect = null;
-        activeState.zoomPart = null;
-        activeState.animationId = null;
-        activeState.clipPathId = null;
-      }
-
-
-      function attachHover(rect, i) {
-
-        const anchor = rect.closest('a');
-
-        const clipPathId = `clip-${i}-${Date.now()}`;
-        const scale = 1.1;
-        const parentGroup = rect.closest('g'); 
-
-        const imageData = getGroupImage(parentGroup);
-        if (!imageData) return; 
-
-        const groupOffsetX = getTransformX(parentGroup);
-        const groupOffsetY = getTransformY(parentGroup); 
-
-        rect.setAttribute('data-index', i);
-
-        rect.addEventListener('mouseover', startHover);
-        rect.addEventListener('mouseout', stopHover);
-
-        rect.addEventListener('touchstart', startHover);
-
-        rect.addEventListener('touchend', cleanupHover);
-
-        if (anchor) {
-            anchor.removeEventListener('click', cleanupHover); 
-        }
-
-        function startHover() {
-          if(activeState.rect === rect) return;
-
-          cleanupHover(); 
-
-          activeState.rect = rect;
-          activeState.clipPathId = clipPathId;
-
-          const x = parseFloat(rect.getAttribute('x'));
-          const y = parseFloat(rect.getAttribute('y'));
-          const width = parseFloat(rect.getAttribute('width'));
-          const height = parseFloat(rect.getAttribute('height'));
-
-          const absoluteX = x + groupOffsetX;
-          const absoluteY = y + groupOffsetY; 
-
-          let clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');
-          clip.setAttribute('id', clipPathId);
-          let clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-          clipRect.setAttribute('x', absoluteX);
-          clipRect.setAttribute('y', absoluteY);
-          clipRect.setAttribute('width', width);
-          clipRect.setAttribute('height', height);
-          clipDefs.appendChild(clip).appendChild(clipRect);
-
-
-          const zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');
-
-          zoomPart.setAttribute('href', imageData.src);
-          zoomPart.setAttribute('width', imageData.width);
-          zoomPart.setAttribute('height', imageData.height);
-          zoomPart.setAttribute('class','zoom-part');
-          zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);
-
-          zoomPart.setAttribute('x', groupOffsetX); 
-          zoomPart.setAttribute('y', groupOffsetY); 
-
-          zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;
-          zoomPart.style.opacity = 0;
-
-          mainSvg.appendChild(zoomPart);
-          activeState.zoomPart = zoomPart;
-
-          rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`;
-          rect.style.transform = `scale(${scale})`;
-          zoomPart.style.transform = `scale(${scale})`;
-          zoomPart.style.opacity = 1;
-
-          let hue = 0;
-          const animationId = setInterval(() => {
-            hue = (hue + 1) % 360;
-            const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;
-            rect.style.filter = glow;
-            if(zoomPart) zoomPart.style.filter = glow;
-          }, 100);
-          activeState.animationId = animationId;
-        }
-
-        function stopHover(e) {
-          const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;
-
-          if(targetRect === activeState.rect && e.type === 'mouseout'){
-              cleanupHover();
-          }
-        }
-      }
-
-      groups.forEach(group => {
-          group.querySelectorAll('.image-mapper-shape').forEach((rect, i) => {
-            rect.setAttribute('data-processed', 'true'); 
-            attachHover(rect, i);
-          });
+  groups.forEach(group => {
+      group.querySelectorAll('.image-mapper-shape').forEach((rect, i) => {
+        rect.setAttribute('data-processed', 'true');
+        attachHover(rect, i);
       });
+  });
 
-      const rootObserver = new MutationObserver(() => {
-        document
-          .querySelectorAll('rect.image-mapper-shape:not([data-processed])')
-          .forEach((rect, i) => {
-            rect.setAttribute('data-processed', 'true');
-            attachHover(rect, i);
-          });
+  const rootObserver = new MutationObserver(() => {
+    document
+      .querySelectorAll('rect.image-mapper-shape:not([data-processed])')
+      .forEach((rect, i) => {
+        rect.setAttribute('data-processed', 'true');
+        attachHover(rect, i);
       });
+  });
 
-      rootObserver.observe(mainSvg, { childList: true, subtree: true });
+  rootObserver.observe(mainSvg, { childList: true, subtree: true });
 
+  function setLinkTarget() {
+    const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) || (window.innerWidth < 800);
 
-      function setLinkTarget() {
-        const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) || (window.innerWidth < 800);
+    const allLinks = document.querySelectorAll('a[xlink\\:href], a[href]');
 
-        const allLinks = document.querySelectorAll('a[xlink\\:href], a[href]');
-
-        allLinks.forEach(link => {
-          if (isMobile) {
-            link.removeAttribute('target');
-          } else {
-            link.setAttribute('target', '_blank'); 
-          }
-        });
+    allLinks.forEach(link => {
+      if (isMobile) {
+        link.removeAttribute('target');
+      } else {
+        link.setAttribute('target', '_blank');
       }
+    });
+  }
 
-      setLinkTarget();
-    </script>
+  setLinkTarget();
+</script>
 </body>
 </html>
