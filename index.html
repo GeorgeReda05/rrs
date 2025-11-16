@@ -8,24 +8,27 @@
     margin: 0;
     padding: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100svh; /* ارتفاع مرئي آمن */
     overflow-x: auto;
     overflow-y: hidden;
     background: black;
   }
+
   body {
     display: block;
     width: auto;
-    height: 100vh;
+    height: 100svh;
   }
+
   #main-svg {
     width: calc(4 * 1024px);
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 100vh;
+    height: 100svh; /* استخدام svh لتجنب التداخل مع شريط المهام */
+    max-height: 100svh;
+    min-height: 100svh;
     display: block;
     background: black;
   }
+
   .image-mapper-shape {  
     fill: transparent;  
     stroke: yellow;   
@@ -56,6 +59,7 @@
   <g transform="translate(0,0)" id="main-group">
     <image href="image/1.png" width="1024" height="2454" id="base-image" preserveAspectRatio="xMinYMin meet"/>
 
+    <!-- روابط الصور -->
     <a href="micro/1.pdf"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>
     <a href="patho/1.pdf"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
     <a href="patho/q/1.pdf"><rect x="368" y="1339" width="115" height="125" class="image-mapper-shape q"/></a>
@@ -71,6 +75,7 @@
   <g transform="translate(1024,0)" id="secondary-group">
     <image href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMinYMin meet"/>
 
+    <!-- روابط الصور -->
     <a href="#"><rect x="137.73" y="348.2" width="115.4" height="383.8" class="image-mapper-shape"/></a>
     <a href="ipc/book.pdf"><rect x="137.52" y="875.78" width="114.89" height="348.72" class="image-mapper-shape ipc"></rect></a>
     <a href="ipc/q/9.pdf"><rect x="137.52" y="1224.5" width="57.4" height="120.94" class="image-mapper-shape q"></rect></a>
@@ -86,18 +91,10 @@
 </svg>
 
 <script>
-  // ===== وضع تصحيح ارتفاع svg ليملأ المساحة الفعلية المتبقية =====
-  function fixSVGHeight() {
-    var h = window.innerHeight;
-    document.getElementById('main-svg').style.height = h + 'px';
-  }
-  window.addEventListener('resize', fixSVGHeight);
-  window.addEventListener('DOMContentLoaded', fixSVGHeight);
-
-  // ===== جافاسكربت الأصلي مع كل الوظائف كما هي =====
+  // ==== لا حاجة لتعديل ارتفاع SVG بالجافاسكربت بعد استخدام svh ====
+  // ===== جافاسكربت الأصلي للـ hover و zoom والروابط كما هو تماماً =====
   const mainSvg = document.getElementById('main-svg');
   const clipDefs = document.getElementById('clip-defs');
-
   const activeState = { rect: null, zoomPart: null, animationId: null, clipPathId: null };
   const groups = document.querySelectorAll('g');
 
