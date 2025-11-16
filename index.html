@@ -1,110 +1,90 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100svh;   /* استخدم svh للمحافظة على ظهور كامل الصورة */
-      overflow-x: auto;
-      overflow-y: hidden;
-      background: black;
-    }
-    body {
-      width: 100vw;
-      height: 100svh;
-      display: block;
-    }
-    #main-svg {
-      width: calc(4 * 1024px);
-      height: 100svh;
-      max-height: 100svh;
-      min-height: 100svh;
-      display: block;
-      background: black;
-    }
-    .image-mapper-shape {  
-      fill: transparent;  
-      stroke: yellow;   
-      stroke-width: 2px;  
-      transform-origin: center center;  
-      transition: transform 0.3s ease, filter 0.3s ease;
-    }
-    .q { stroke: red; }
-    .v { stroke: blue; }
-    .ipc {stroke: white;}
-    .o {stroke: #80CBC4;}
-    .a {stroke: #F48FB1;}
-    .zoom-part {
-      pointer-events: none;
-      transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-      image-rendering: auto;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;   /* استخدام vh بدل svh لضمان التوافق */
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: black;
+  }
+  body {
+    display: block;
+    width: auto;
+    height: 100vh;
+  }
+  #main-svg {
+    width: calc(4 * 1024px);
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 100vh;
+    display: block;
+    background: black;
+  }
+  .image-mapper-shape {  
+    fill: transparent;  
+    stroke: yellow;   
+    stroke-width: 2px;  
+    transform-origin: center center;  
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .q { stroke: red; }
+  .v { stroke: blue; }
+  .ipc {stroke: white;}
+  .o {stroke: #80CBC4;}
+  .a {stroke: #F48FB1;}
+  .zoom-part {
+    pointer-events: none;
+    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+    image-rendering: auto;
+  }
+</style>
 </head>
 <body>
-   <svg xmlns="http://www.w3.org/2000/svg"
-       xmlns:xlink="http://www.w3.org/1999/xlink"
-       viewBox="0 0 2048 2454"
-       preserveAspectRatio="xMidYMid meet"
-       id="main-svg"> 
-    <defs id="clip-defs"></defs>
 
-    <g transform="translate(0,0)" id="main-group">
-      <image href="image/1.png" width="1024" height="2454" id="base-image"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 2048 2454"
+     preserveAspectRatio="xMidYMid meet"
+     id="main-svg"> 
+  <defs id="clip-defs"></defs>
 
-      <a href="micro/1.pdf"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>
-      <a href="patho/1.pdf"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
-      <a href="patho/q/1.pdf"><rect x="368" y="1339" width="115" height="125" class="image-mapper-shape q"/></a>
-      <a href="physio/2.pdf"><rect x="368" y="1465" width="115" height="378.5" class="image-mapper-shape"/></a>
-      <a href="anatomy/1.pdf"><rect x="368" y="1845" width="115" height="380" class="image-mapper-shape"/></a>
-      <a href="physio/1.pdf"><rect x="598" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>
-      <a href="histo/1.pdf"><rect x="712.35" y="702" width="115" height="380" class="image-mapper-shape"/></a>
-      <a href="anatomy/2.pdf"><rect x="712.35" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
-      <a href="physio/2.pdf"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
-      <a href="physio/q/1.pdf"><rect x="598" y="2100" width="115" height="127" class="image-mapper-shape q"/></a>
-    </g>
+  <g transform="translate(0,0)" id="main-group">
+    <image href="image/1.png" width="1024" height="2454" id="base-image"/>
 
-    <g transform="translate(1024,0)" id="secondary-group">
-      <image xlink:href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMidYMid meet"/>
+    <a href="micro/1.pdf"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>
+    <a href="patho/1.pdf"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
+    <a href="patho/q/1.pdf"><rect x="368" y="1339" width="115" height="125" class="image-mapper-shape q"/></a>
+    <a href="physio/2.pdf"><rect x="368" y="1465" width="115" height="378.5" class="image-mapper-shape"/></a>
+    <a href="anatomy/1.pdf"><rect x="368" y="1845" width="115" height="380" class="image-mapper-shape"/></a>
+    <a href="physio/1.pdf"><rect x="598" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>
+    <a href="histo/1.pdf"><rect x="712.35" y="702" width="115" height="380" class="image-mapper-shape"/></a>
+    <a href="anatomy/2.pdf"><rect x="712.35" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
+    <a href="physio/2.pdf"><rect x="598" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
+    <a href="physio/q/1.pdf"><rect x="598" y="2100" width="115" height="127" class="image-mapper-shape q"/></a>
+  </g>
 
-      <a xlink:href="#">
-      <rect x="137.73099415204678" y="348.2036549707604" width="115.39897660818713" height="383.8" class="image-mapper-shape"/>
-      </a>
-       <a xlink:href="ipc/book.pdf">
-       <rect x="137.52282529239764" y="875.7811403508772" width="114.89069809941526" height="348.72" class="image-mapper-shape ipc" data-index="8"></rect>
-</a>
-<a xlink:href="ipc/q/9.pdf">
-       <rect x="137.52282529239764" y="1224.5" width="57.4" height="120.936" class="image-mapper-shape q" data-index="8"></rect>
-</a>
-<a xlink:href="ipc/a/9.pdf">
-       <rect x="194.95" y="1224.5" width="57.4" height="120.936" class="image-mapper-shape a" data-index="8"></rect>
-</a>
-      <a xlink:href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing">
-      <rect x="138.01636513157925" y="1828.277485380117" width="115.23478618421012" height="105.08391812865557" class="image-mapper-shape v" data-index="3"></rect>
-      </a>
- <a xlink:href="pharma/1.pdf">
-    <rect x="137.73901681286551" y="1935.8795321637424" width="115.73192616959065" height="323.0143274853806"  class="image-mapper-shape" data-index="2"></rect>
-      </a>
-      <a xlink:href="#">
-      <rect x="367.910745614035" y="1344.915497076024" width="115.7188596491228" height="482.88011695906425" class="image-mapper-shape" data-index="4"></rect>
-      </a>
-      <a xlink:href="#">
-      <rect x="483.5782894736842" y="1104.3466374269003" width="114.13428362573097" height="361.9701754385967" class="image-mapper-shape" data-index="5"></rect>
-      </a>
-      <a xlink:href="#">
-      <rect x="597.5236842105263" y="1465.724707602339" width="114.63859649122799" height="362.65745614035086" class="image-mapper-shape" data-index="6"></rect>
-      </a>
-      <a xlink:href="#">
-      <rect x="711.6490497076023" y="477.07792397660813" width="114.72726608187133" height="377.8353801169589" class="image-mapper-shape" data-index="7"></rect>
-      </a>
-      <a xlink:href="#">
-      <rect x="712.5633040935672" y="1345.1815789473683" width="114.0740497076024" height="482.9260233918128" class="image-mapper-shape" data-index="9"></rect>
-      </a>
-    </g>
+  <g transform="translate(1024,0)" id="secondary-group">
+    <image href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMidYMid meet"/>
+
+    <a href="#"><rect x="137.73" y="348.2" width="115.4" height="383.8" class="image-mapper-shape"/></a>
+    <a href="ipc/book.pdf"><rect x="137.52" y="875.78" width="114.89" height="348.72" class="image-mapper-shape ipc"></rect></a>
+    <a href="ipc/q/9.pdf"><rect x="137.52" y="1224.5" width="57.4" height="120.94" class="image-mapper-shape q"></rect></a>
+    <a href="ipc/a/9.pdf"><rect x="194.95" y="1224.5" width="57.4" height="120.94" class="image-mapper-shape a"></rect></a>
+    <a href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing"><rect x="138.02" y="1828.28" width="115.23" height="105.08" class="image-mapper-shape v"></rect></a>
+    <a href="pharma/1.pdf"><rect x="137.74" y="1935.88" width="115.73" height="323.01" class="image-mapper-shape"></rect></a>
+    <a href="#"><rect x="367.91" y="1344.92" width="115.72" height="482.88" class="image-mapper-shape"></rect></a>
+    <a href="#"><rect x="483.58" y="1104.35" width="114.13" height="361.97" class="image-mapper-shape"></rect></a>
+    <a href="#"><rect x="597.52" y="1465.72" width="114.64" height="362.66" class="image-mapper-shape"></rect></a>
+    <a href="#"><rect x="711.65" y="477.08" width="114.73" height="377.84" class="image-mapper-shape"></rect></a>
+    <a href="#"><rect x="712.56" y="1345.18" width="114.07" height="482.93" class="image-mapper-shape"></rect></a>
+  </g>
+</svg>
+
 <script>
   // ===== وضع تصحيح ارتفاع svg ليملأ المساحة الفعلية المتبقية =====
   function fixSVGHeight() {
