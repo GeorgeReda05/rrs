@@ -187,8 +187,17 @@ function activateRects(){
       rect.addEventListener("mouseenter",()=>applyHover(rect));
       rect.addEventListener("mouseleave",clearHover);
 
-      rect.addEventListener("touchstart",()=>applyHover(rect));
-      rect.addEventListener("touchend",clearHover);
+      rect.addEventListener("touchstart",(e)=>{
+        e.preventDefault(); 
+        applyHover(rect);
+      });
+      rect.addEventListener("touchend",(e)=>{
+        const link = rect.closest('a').getAttribute('href');
+        if(link && link !== '#'){
+          window.location.href = link;
+        }
+        setTimeout(clearHover, 100); 
+      });
     });
   }
   activateRects();
