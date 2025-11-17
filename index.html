@@ -32,17 +32,40 @@
     stroke: yellow;
     stroke-width: 2px;
     transform-origin: center center;
-    transition: transform 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease;
+    /* transition: transform 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease; */
+    /* 💡 قللت خصائص الـ transition عشان نعتمد على الكلاس الجديد في التغييرات */
+    transition: transform 0.3s ease, stroke-width 0.3s ease; 
   }
   .q { stroke: red; }
   .v { stroke: blue; }
   .ipc {stroke: white;}
   .o {stroke: #80CBC4;}
   .a {stroke: #F48FB1;}
+
+  /* 💡 هذا هو مفتاح الحركة بجودة عالية: دالة Keyframes في CSS */
+  @keyframes color-cycle {
+    0% { filter: drop-shadow(0 0 10px #FF0000) drop-shadow(0 0 6px rgba(255, 0, 0, 0.5)); } /* أحمر */
+    16% { filter: drop-shadow(0 0 10px #FFFF00) drop-shadow(0 0 6px rgba(255, 255, 0, 0.5)); } /* أصفر */
+    33% { filter: drop-shadow(0 0 10px #00FF00) drop-shadow(0 0 6px rgba(0, 255, 0, 0.5)); } /* أخضر */
+    50% { filter: drop-shadow(0 0 10px #00FFFF) drop-shadow(0 0 6px rgba(0, 255, 255, 0.5)); } /* سماوي */
+    66% { filter: drop-shadow(0 0 10px #0000FF) drop-shadow(0 0 6px rgba(0, 0, 255, 0.5)); } /* أزرق */
+    83% { filter: drop-shadow(0 0 10px #FF00FF) drop-shadow(0 0 6px rgba(255, 0, 255, 0.5)); } /* بنفسجي */
+    100% { filter: drop-shadow(0 0 10px #FF0000) drop-shadow(0 0 6px rgba(255, 0, 0, 0.5)); } /* أحمر مرة تانية */
+  }
+
+  /* 💡 طبقنا الـ Animation بس على عنصر الـ rect الصغير (image-mapper-shape) */
+  .image-mapper-shape.active-glow {
+    animation: color-cycle 4s linear infinite; 
+    stroke-width: 4px !important; 
+  }
+
   .zoom-part {
     pointer-events: none;
-    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-    image-rendering: auto;
+    opacity: 0;
+    /* الـ transition هنا عشان حركة الـ Zoom تكون سلسة */
+    transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease; 
+    image-rendering: high-quality;
+    image-rendering: -webkit-optimize-contrast; 
   }
 </style>
 
@@ -118,19 +141,18 @@
     <a href="#"><rect x="0" y="1364.7360989492217" width="113.21139746569713" height="447.5422943469862" class="image-mapper-shape"/></a>
     </g>
 </g>  
-    </svg>  
+    </svg> 
 <script>  
   const mainSvg = document.getElementById('main-svg');  
   const clipDefs = document.getElementById('clip-defs');  
-  const activeState = { rect: null, zoomPart: null, animationId: null, clipPathId: null };  
-  const groups = document.querySelectorAll('g'); 
+  const activeState = { rect: null, zoomPart: null, clipPathId: null }; 
 
   function setDynamicSvgWidth() {
       const weekGroups = document.querySelectorAll('svg > g[transform*="translate"]');
       const IMAGE_WIDTH = 1024; 
       const totalWidth = weekGroups.length * IMAGE_WIDTH; 
       mainSvg.style.width = `${totalWidth}px`;
-      mainSvg.setAttribute('viewBox', `0 0 ${totalWidth} 2454`); // تحديث viewBox
+      mainSvg.setAttribute('viewBox', `0 0 ${totalWidth} 2454`); 
   }
   setDynamicSvgWidth();
 
@@ -149,8 +171,9 @@
     const match = transformAttr.match(/translate\s*\(([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);  
     return match ? parseFloat(match[2]) : 0;  
   }
+
   function getGroupImage(parentGroup) { 
-    const baseImage = parentGroup.querySelector('image');  
+    const baseImage = parentGroup.querySelector('.base-image'); 
     if (!baseImage) return null;  
     const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');  
     const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));  
@@ -161,16 +184,19 @@
 
   function cleanupHover() {  
     if (!activeState.rect) return;  
-    if(activeState.animationId) clearInterval(activeState.animationId);  
+
     activeState.rect.style.transform = 'scale(1)';  
-    activeState.rect.style.filter = 'none';  
+    activeState.rect.classList.remove('active-glow'); 
     activeState.rect.style.strokeWidth = '2px'; 
-    if(activeState.zoomPart){ activeState.zoomPart.remove(); }  
+    
+    if(activeState.zoomPart){ 
+        activeState.zoomPart.style.filter = 'none'; // 💡 إزالة الفلتر الثابت من قصاصة الصورة عند الإغلاق
+        activeState.zoomPart.remove(); 
+    }  
     const currentClip = document.getElementById(activeState.clipPathId);  
     if(currentClip) currentClip.remove();  
     activeState.rect = null;  
     activeState.zoomPart = null;  
-    activeState.animationId = null;  
     activeState.clipPathId = null;  
   }
 
@@ -183,7 +209,11 @@
     rect.addEventListener('mouseover', startHover);  
     rect.addEventListener('mouseout', stopHover);  
     rect.addEventListener('touchstart', startHover);  
-    rect.addEventListener('touchend', cleanupHover);  
+    
+    // 💡 التعديل هنا: شلنا الـ setTimeout عشان الإغلاق يكون فوري
+    rect.addEventListener('touchend', (e) => {
+        cleanupHover(); 
+    }); 
     if (anchor) { anchor.removeEventListener('click', cleanupHover); }  
 
     function startHover() {  
@@ -197,7 +227,7 @@
       const width = parseFloat(rect.getAttribute('width'));  
       const height = parseFloat(rect.getAttribute('height'));
 
-      const dayGroup = rect.closest('g');
+      const dayGroup = rect.closest('g[transform]'); 
       const weekGroup = rect.closest('svg > g[transform*="translate"]'); 
 
       const imageData = getGroupImage(weekGroup);
@@ -229,6 +259,9 @@
       zoomPart.setAttribute('x', weekOffsetX);  
       zoomPart.setAttribute('y', weekOffsetY);
 
+      // 💡 ده اللي هيخلي الوهج ثابت على قصاصة الصورة الكبيرة (بدون حركة) عشان الجودة متتأثرش
+      zoomPart.style.filter = 'drop-shadow(0 0 10px yellow) drop-shadow(0 0 6px rgba(255, 255, 0, 0.5))';
+
       zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;  
       zoomPart.style.opacity = 0;  
       mainSvg.appendChild(zoomPart);  
@@ -236,29 +269,17 @@
 
       rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`; 
       rect.style.transform = `scale(${scale})`;  
-      rect.style.strokeWidth = '4px'; 
+      
+      // 💡 الكلاس ده هو اللي بيشغل الـ animation بتاع الألوان اللي ضفناها في CSS على الـ rect الصغير
+      rect.classList.add('active-glow'); 
 
       zoomPart.style.transform = `scale(${scale})`;  
       zoomPart.style.opacity = 1;  
-
-      // تأثير الـ Glow والـ Animation
-      let hue = 0;  
-      let currentStrokeWidth = 4;
-      const animationId = setInterval(() => {  
-        hue = (hue + 1) % 360;  
-        const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;  
-        rect.style.filter = glow;  
-        if(zoomPart) zoomPart.style.filter = glow;  
-
-        currentStrokeWidth = (currentStrokeWidth === 4) ? 3.5 : 4;
-        rect.style.strokeWidth = `${currentStrokeWidth}px`; 
-
-      }, 100);  
-      activeState.animationId = animationId;  
     }  
 
     function stopHover(e) {  
       const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;  
+      // هنا الإغلاق بيتم فوراً مجرد ما الماوس يتحرك بعيد
       if(targetRect === activeState.rect && e.type === 'mouseout'){  
           cleanupHover();  
       }  
@@ -291,3 +312,4 @@
   setLinkTarget();  
 </script>  
 </body>
+</html>
