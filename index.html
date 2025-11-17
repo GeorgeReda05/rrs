@@ -125,38 +125,28 @@
   const mainSvg = document.getElementById('main-svg');  
   const clipDefs = document.getElementById('clip-defs');  
   const activeState = { rect: null, zoomPart: null, animationId: null, clipPathId: null };  
-  const groups = document.querySelectorAll('g'); 
-
-  // 🛠️ وظيفة لتحديد عرض الـ SVG ديناميكياً بناءً على عدد المجموعات الرئيسية (الأسابيع)
+  const groups = document.querySelectorAll('g');
   function setDynamicSvgWidth() {
-      // نختار مجموعات الأسبوع الرئيسية اللي فيها translate عشان نعرف عرضها
       const weekGroups = document.querySelectorAll('svg > g[transform*="translate"]');
       const IMAGE_WIDTH = 1024; 
       const totalWidth = weekGroups.length * IMAGE_WIDTH; 
       mainSvg.style.width = `${totalWidth}px`;
   }
   setDynamicSvgWidth();
-
-
-  // 🛠️ وظيفة لاستخراج إحداثي X من سمة 'transform'
   function getTransformX(groupElement) {  
     if (!groupElement) return 0;
     const transformAttr = groupElement.getAttribute('transform');  
     if (!transformAttr) return 0;  
     const match = transformAttr.match(/translate\s*\(([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);  
     return match ? parseFloat(match[1]) : 0;  
-  }  
-
-  // 🛠️ وظيفة لاستخراج إحداثي Y من سمة 'transform'
+  } 
   function getTransformY(groupElement) {  
     if (!groupElement) return 0;
     const transformAttr = groupElement.getAttribute('transform');  
     if (!transformAttr) return 0;  
     const match = transformAttr.match(/translate\s*\(([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);  
     return match ? parseFloat(match[2]) : 0;  
-  }  
-
-  // 🛠️ وظيفة للحصول على بيانات صورة الخلفية
+  } 
   function getGroupImage(parentGroup) {  
     const baseImage = parentGroup.querySelector('image');  
     if (!baseImage) return null;  
@@ -165,9 +155,7 @@
     const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));  
     if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;  
     return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };  
-  }  
-
-  // 🛠️ وظيفة لإزالة تأثير الـ Hover والـ Zoom
+  } 
   function cleanupHover() {  
     if (!activeState.rect) return;  
     if(activeState.animationId) clearInterval(activeState.animationId);  
@@ -181,9 +169,7 @@
     activeState.zoomPart = null;  
     activeState.animationId = null;  
     activeState.clipPathId = null;  
-  }  
-
-  // 🛠️ وظيفة ربط حدث الـ Hover لكل مستطيل
+  }
   function attachHover(rect, i) {  
     const anchor = rect.closest('a');  
     const clipPathId = `clip-${i}-${Date.now()}`;  
@@ -205,26 +191,17 @@
       const x = parseFloat(rect.getAttribute('x'));  
       const y = parseFloat(rect.getAttribute('y'));  
       const width = parseFloat(rect.getAttribute('width'));  
-      const height = parseFloat(rect.getAttribute('height'));  
-
-      // ⬅️ هنا التعديلات الجوهرية لحساب الإحداثيات المطلقة
-      const dayGroup = rect.closest('g'); // مجموعة اليوم (الـ G الأقرب اللي فيها translate(368,0) مثلاً)
-      // مجموعة الأسبوع (الـ G الرئيسية اللي فيها translate(1024,0) مثلاً)
+      const height = parseFloat(rect.getAttribute('height'));
       const weekGroup = dayGroup.closest('svg > g[transform*="translate"]'); 
       
-      const imageData = getGroupImage(weekGroup); // جلب بيانات صورة الأسبوع
+      const imageData = getGroupImage(weekGroup);
       if (!imageData) return;  
 
-      const weekOffsetX = getTransformX(weekGroup); // إزاحة الأسبوع (0 أو 1024)
-      const dayOffsetX = getTransformX(dayGroup); // إزاحة اليوم (368، 598، إلخ)
-      const weekOffsetY = getTransformY(weekGroup); // غالباً 0
-      
-      // ⬅️ الموقع المطلق (Absolute Position) بالنسبة لبداية الـ SVG
-      // x المستطيل + إزاحة اليوم + إزاحة الأسبوع
+      const weekOffsetX = getTransformX(weekGroup);
+      const dayOffsetX = getTransformX(dayGroup);
+      const weekOffsetY = getTransformY(weekGroup);
       const absoluteX = x + weekOffsetX + dayOffsetX;  
       const absoluteY = y + weekOffsetY;  
-      
-      // 1. تحديد منطقة القطع (clipPath) بالموقع المطلق
       let clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');  
       clip.setAttribute('id', clipPathId);  
       let clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');  
@@ -233,28 +210,18 @@
       clipRect.setAttribute('width', width);  
       clipRect.setAttribute('height', height);  
       clipDefs.appendChild(clip).appendChild(clipRect);  
-
-      // 2. إنشاء صورة الـ Zoom
       const zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');  
       zoomPart.setAttribute('href', imageData.src);  
       zoomPart.setAttribute('width', imageData.width);  
       zoomPart.setAttribute('height', imageData.height);  
       zoomPart.setAttribute('class','zoom-part');  
-      zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);  
-
-      // ⬅️ موقع صورة الخلفية (zoomPart) يكون هو موقع مجموعة الأسبوع فقط
+      zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);
       zoomPart.setAttribute('x', weekOffsetX);  
       zoomPart.setAttribute('y', 0); 
-      
-      // 3. تحديد مركز التكبير (transformOrigin)
-      // نستخدم الإحداثيات المطلقة عشان التكبير يركز في المكان الصح على الـ SVG كله
       zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;  
       zoomPart.style.opacity = 0;  
       mainSvg.appendChild(zoomPart);  
-      activeState.zoomPart = zoomPart;  
-
-      // 4. تطبيق التكبير على المستطيل نفسه
-      // هنا الإحداثيات نسبية لمجموعة اليوم اللي المستطيل موجود جواها
+      activeState.zoomPart = zoomPart; 
       rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`; 
       rect.style.transform = `scale(${scale})`;  
       rect.style.strokeWidth = '4px'; 
@@ -262,7 +229,7 @@
       zoomPart.style.transform = `scale(${scale})`;  
       zoomPart.style.opacity = 1;  
 
-      // 5. تأثير الـ Glow والـ Animation
+     Glow والـ Animation
       let hue = 0;  
       let currentStrokeWidth = 4;
       const animationId = setInterval(() => {  
@@ -285,15 +252,11 @@
       }  
     }  
   }  
-
-  // 🛠️ ربط الـ Hover بجميع المستطيلات الموجودة
-  document.querySelectorAll('rect.image-mapper-shape').forEach((rect, i) => {  
+document.querySelectorAll('rect.image-mapper-shape').forEach((rect, i) => {  
       rect.setAttribute('data-processed', 'true');  
       attachHover(rect, i);  
   });  
-
-  // 🛠️ مراقب لإضافة الـ Hover للمستطيلات الجديدة ديناميكياً
-  const rootObserver = new MutationObserver(() => {  
+const rootObserver = new MutationObserver(() => {  
     document  
       .querySelectorAll('rect.image-mapper-shape:not([data-processed])')  
       .forEach((rect, i) => {  
