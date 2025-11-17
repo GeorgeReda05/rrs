@@ -1,309 +1,291 @@
-<!DOCTYPE html><html lang="ar">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100svh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    background: black;
-  }
-  #main-svg { 
-    height: 100svh; 
-    background: black; 
-    display: block; 
-  }
-
-/* ⬅️ تم تعديل الـCSS عشان يبقى زي الكود اللي مفهوش رعشة، مع ترك الألوان زي ما هي */
-.image-mapper-shape { 
-    fill: transparent; 
-    stroke: yellow; 
-    stroke-width: 2px; /* تعديل الوحدة */
-    transform-origin: center center; 
-    transition: transform 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease; /* تعديل السرعة */
+<!DOCTYPE html>    <html lang="ar">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<style>    
+  html, body {    
+    margin: 0;    
+    padding: 0;    
+    width: 100vw;    
+    height: 100svh;    
+    overflow-x: auto;  
+    overflow-y: hidden;    
+    background: black;    
+  }    
+  body {  
+    display: block;  
+    width: auto;  
+    height: 100svh;  
+  }  #main-svg {
+height: 100svh;
+max-height: 100svh;
+min-height: 100svh;
+display: block;
+background: black;
 }
 
-.q { stroke: red; } .v { stroke: blue; } .ipc { stroke: white; } .o { stroke: #80CBC4; } .a { stroke: #F48FB1; }
-
-.zoom-part { 
-    pointer-events: none; 
-    opacity: 0; 
-    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease; /* تعديل السرعة */
-    image-rendering: auto; 
-    transform-origin: center; 
+.image-mapper-shape {
+fill: transparent;
+stroke: yellow;
+stroke-width: 2px;
+transform-origin: center center;
+transition: transform 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease;
 }
-
-/* ⬅️ تم حذف الـ@keyframes glowPulse والـ.glow عشان هنستخدم الـfilter في الـJavaScript مباشرة */
-
+.q { stroke: red; }
+.v { stroke: blue; }
+.ipc {stroke: white;}
+.o {stroke: #80CBC4;}
+.a {stroke: #F48FB1;}
+.zoom-part {
+pointer-events: none;
+transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+image-rendering: auto;
+}
 </style>
 
-</head>
-<body>
+</head>    
+<body>    
+  <svg xmlns="http://www.w3.org/2000/svg"    
+    viewBox="0 0 2048 2454"    
+    preserveAspectRatio="xMinYMin meet"    
+    id="main-svg">  
+    <defs id="clip-defs"></defs>  <g transform="translate(0,0)"> الاسبوع الأول
 
-  <svg xmlns="http://www.w3.org/2000/svg"  
-    viewBox="0 0 2048 2454"  
-    preserveAspectRatio="xMinYMin meet"  
-    id="main-svg">
-    <defs id="clip-defs"></defs>
+<image href="image/1.png" width="1024" height="2454" preserveAspectRatio="xMinYMin meet"/> <g transform="translate(368,0)"> الإثنين
+<a href="micro/1.pdf"><rect x="0" y="703" width="115" height="380" class="image-mapper-shape"/></a>
 
-    <g transform="translate(0,0)"> الاسبوع الأول
-<image href="image/1.png" width="1024" height="2454" preserveAspectRatio="xMinYMin meet" class="base-image"/> <g transform="translate(368,0)"> الإثنين
-<a href="micro/1.pdf"><rect x="0" y="703" width="115" height="380" class="image-mapper-shape"/></a>  
+<a href="patho/1.pdf"><rect x="0" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>
 
-<a href="patho/1.pdf"><rect x="0" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>  
+<a href="patho/q/1.pdf"><rect x="0" y="1339" width="115" height="125" class="image-mapper-shape q"/></a>
 
-<a href="patho/q/1.pdf"><rect x="0" y="1339" width="115" height="125" class="image-mapper-shape q"/></a>  
+<a href="physio/2.pdf"><rect x="0" y="1465" width="115" height="378.5" class="image-mapper-shape"/></a>
 
-<a href="physio/2.pdf"><rect x="0" y="1465" width="115" height="378.5" class="image-mapper-shape"/></a>  
-
-<a href="anatomy/1.pdf"><rect x="0" y="1845" width="115" height="380" class="image-mapper-shape"/></a>  
-</g> 
+<a href="anatomy/1.pdf"><rect x="0" y="1845" width="115" height="380" class="image-mapper-shape"/></a>
+</g>
 <g transform="translate(598,0)"> الأربع
 
-<a href="physio/1.pdf"><rect x="0" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>  
+<a href="physio/1.pdf"><rect x="0" y="366" width="114.5" height="315" class="image-mapper-shape"/></a>
 
-<a href="physio/2.pdf"><rect x="0" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>  
+<a href="physio/2.pdf"><rect x="0" y="1846" width="115" height="253.4" class="image-mapper-shape"/></a>
 
 <a href="physio/q/1.pdf"><rect x="0" y="2100" width="115" height="127" class="image-mapper-shape q"/></a>
 </g>
 <g transform="translate(712.35,0)"> الخميس
 
-<a href="histo/1.pdf"><rect x="0" y="702" width="115" height="380" class="image-mapper-shape"/></a>  
+<a href="histo/1.pdf"><rect x="0" y="702" width="115" height="380" class="image-mapper-shape"/></a>
 
-<a href="anatomy/2.pdf"><rect x="0" y="1465" width="115" height="380" class="image-mapper-shape"/></a>  
-</g>  
+<a href="anatomy/2.pdf"><rect x="0" y="1465" width="115" height="380" class="image-mapper-shape"/></a>
 </g>
-    <g transform="translate(1024,0)"> الاسبوع الثاني
+</g>
+<g transform="translate(1024,0)"> الاسبوع الثاني
 
-<image href="image/2.png" width="1024" height="2454" preserveAspectRatio="xMinYMin meet" class="base-image"/> <g transform="translate(139.5,0)"> السبت
+<image href="image/2.png" width="1024" height="2454" preserveAspectRatio="xMinYMin meet"/> <g transform="translate(140,0)"> السبت
 <a href="https://drive.google.com/file/d/1vLk8z7AGqjlJZx1rvL_e7tQa8arC1qud/view?usp=sharing"><rect x="0" y="308.9191510221431" width="114.81010065105059" height="113.19699822367954" class="image-mapper-shape v"/></a>
-    <a href="pharma/1.pdf"><rect x="0" y="421.1304391087087" width="113.1443225155385" height="227.44459430799515" class="image-mapper-shape"/></a>
-    <a href="ipc/Book.pdf"><rect x="0" y="876" width="115" height="349" class="image-mapper-shape ipc"/></a>  
-    <a href="ipc/q/9.pdf"><rect x="0" y="1225" width="57.5" height="121" class="image-mapper-shape q"/></a>  
-    <a href="ipc/a/9.pdf"><rect x="57.5" y="1225" width="57.5" height="121" class="image-mapper-shape a"/></a>  
-    <a href="#"><rect x="0" y="1810.383890491999" width="115.86350089581418" height="470.24169690909093" class="image-mapper-shape"/></a>
-    </g>
-
-<g transform="translate(254.5,0)"> الأحد
+<a href="pharma/1.pdf"><rect x="0" y="421.1304391087087" width="113.1443225155385" height="227.44459430799515" class="image-mapper-shape"/></a>
+<a href="ipc/book.pdf"><rect x="0" y="876" width="115" height="349" class="image-mapper-shape ipc"/></a>
+<a href="ipc/q/9.pdf"><rect x="0" y="1225" width="57.5" height="121" class="image-mapper-shape q"/></a>
+<a href="ipc/a/9.pdf"><rect x="57.5" y="1225" width="57.5" height="121" class="image-mapper-shape a"/></a>
+<a href="#"><rect x="0" y="1810.383890491999" width="115.86350089581418" height="470.24169690909093" class="image-mapper-shape"/></a>
 </g>
 
-<g transform="translate(369.5,0)"> الإثنين
-    <a href="physio/3.pdf"><rect x="0" y="1365" width="115" height="450" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="421" width="114.62348009508963" height="455.5" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="1812.0873755033645" width="113.932817717675" height="471.4497750874907" class="image-mapper-shape"/></a>
-    </g>
+<g transform="translate(255,0)"> الأحد
+</g>
 
-<g transform="translate(484.5,0)"> الثلاثاء
+<g transform="translate(370,0)"> الإثنين
+<a href="physio/3.pdf"><rect x="0" y="1369" width="115" height="450" class="image-mapper-shape"/></a>
+<a href="#"><rect x="0" y="422.291127376671" width="114.62348009508963" height="456.42753801636815" class="image-mapper-shape"/></a>
+<a href="#"><rect x="0" y="1812.0873755033645" width="113.932817717675" height="471.4497750874907" class="image-mapper-shape"/></a>
+</g>
+
+<g transform="translate(485,0)"> الثلاثاء
 <a href="#"><rect x="0" y="1121.2977744061197" width="113.83913151011649" height="347.86709572240375" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="1470.588390130531" width="112.62070957241832" height="340.4739051562792" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="1813.7791953060073" width="113.88100778674408" height="361.3670230551447" class="image-mapper-shape"/></a>
-    </g>
+<a href="#"><rect x="0" y="1470.588390130531" width="112.62070957241832" height="340.4739051562792" class="image-mapper-shape"/></a>
+<a href="#"><rect x="0" y="1813.7791953060073" width="113.88100778674408" height="361.3670230551447" class="image-mapper-shape"/></a>
+</g>
 
-<g transform="translate(599.5,0)"> الأربع
+<g transform="translate(600,0)"> الأربع
 <a href="#"><rect x="0" y="1469.190023234833" width="113.72594253172372" height="343.19918954424566" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="421.6499054346654" width="115.795514601224" height="457.44678562856114" class="image-mapper-shape"/></a>
-    </g>
+<a href="#"><rect x="0" y="421.6499054346654" width="115.795514601224" height="457.44678562856114" class="image-mapper-shape"/></a>
+</g>
 
-<g transform="translate(714.5,0)"> الخميس
+<g transform="translate(715,0)"> الخميس
 <a href="#"><rect x="0" y="422.2539445238651" width="114.39058602561886" height="340.47536330736926" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="877.494183014872" width="114.6383805765447" height="485.4349021955651" class="image-mapper-shape"/></a>
-    <a href="#"><rect x="0" y="1364.7360989492217" width="113.21139746569713" height="447.5422943469862" class="image-mapper-shape"/></a>
-    </g>
-</g>  
-    </svg>  
-<script>
-(function(){
-  const svg = document.getElementById("main-svg");
-  const clipDefs = document.getElementById("clip-defs");
+<a href="#"><rect x="0" y="877.494183014872" width="114.6383805765447" height="485.4349021955651" class="image-mapper-shape"/></a>
+<a href="#"><rect x="0" y="1364.7360989492217" width="113.21139746569713" height="447.5422943469862" class="image-mapper-shape"/></a>
+</g>
+</g>
+</svg>
+
+<script>    
+  const mainSvg = document.getElementById('main-svg');    
+  const clipDefs = document.getElementById('clip-defs');    
+  const activeState = { rect: null, zoomPart: null, animationId: null, clipPathId: null };    
+  const groups = document.querySelectorAll('g');   
   
-  // ⬅️ تعريف حالة النشاط الجديدة (مثل الكود اللي مفهوش رعشة)
-  const activeState = {
-    rect: null,
-    zoomPart: null,
-    animationId: null,
-    clipPathId: null
-  };
+  function setDynamicSvgWidth() {  
+      const weekGroups = document.querySelectorAll('svg > g[transform*="translate"]');  
+      const IMAGE_WIDTH = 1024;   
+      const totalWidth = weekGroups.length * IMAGE_WIDTH;   
+      mainSvg.style.width = `${totalWidth}px`;  
+      mainSvg.setAttribute('viewBox', `0 0 ${totalWidth} 2454`); // تحديث viewBox  
+  }  
+  setDynamicSvgWidth();  
   
-  // ⬅️ متغير جديد لتطبيق التأخير عند الخروج (زي ما اتفقنا)
-  let leaveTimer = null; 
-  const SCALE_AMOUNT = 1.12; 
-
-function getTransformX(groupElement) {
-    if (!groupElement) return 0;
-    const transformAttr = groupElement.getAttribute('transform');
-    if (!transformAttr) return 0;
-    const match = transformAttr.match(/translate\s*\(([\d\.-]+)\s*,\s*([\d\.-]+)\s*\)/);
-    return match ? parseFloat(match[1]) : 0;
-}
-
-function getGroupImage(parentGroup) {
-    const baseImage = parentGroup.querySelector('.base-image');
-    if (!baseImage) return null;
-
-    const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');  
-    const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));  
-    const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));  
-
-    if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;  
-
-    return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };
-}
-
-function updateWidth(){
-    const weeks = svg.querySelectorAll(':scope > g[transform^="translate"]');
-    const w = weeks.length * 1024;
-    svg.style.width = w + "px";
-    svg.setAttribute("viewBox", `0 0 ${w} 2454`);
-  }
-  updateWidth();
-let touchScrolling = false;
-  let touchTimer;
-  window.addEventListener("touchstart",()=>{
-    touchScrolling = true;
-    clearTimeout(touchTimer);
-    touchTimer = setTimeout(()=>touchScrolling=false,150);
-  },{passive:true});
+  function getTransformX(groupElement) {    
+    if (!groupElement) return 0;  
+    const transformAttr = groupElement.getAttribute('transform');    
+    if (!transformAttr) return 0;    
+    const match = transformAttr.match(/translate\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*/);    
+    return match ? parseFloat(match[1]) : 0;    
+  }   
   
-// ⬅️ دالة التنظيف الجديدة (من الكود اللي مفهوش رعشة)
-function clearHover(){
-    if (!activeState.rect) return;
-
-    if(activeState.animationId) clearInterval(activeState.animationId);  
-
-    activeState.rect.style.transform = 'scale(1)';  
-    activeState.rect.style.filter = 'none';  
-    activeState.rect.style.strokeWidth = '2px';
-
-    if(activeState.zoomPart){ activeState.zoomPart.remove(); }  
-
-    const currentClip = document.getElementById(activeState.clipPathId);  
-    if(currentClip) currentClip.remove();  
-
-    activeState.rect = null;  
-    activeState.zoomPart = null;  
-    activeState.animationId = null;  
-    activeState.clipPathId = null;
-  }
+  function getTransformY(groupElement) {    
+    if (!groupElement) return 0;  
+    const transformAttr = groupElement.getAttribute('transform');    
+    if (!transformAttr) return 0;    
+    const match = transformAttr.match(/translate\s*([\d\.-]+)\s*,\s*([\d\.-]+)\s*/);    
+    return match ? parseFloat(match[2]) : 0;    
+  }  
+  function getGroupImage(parentGroup) {   
+    const baseImage = parentGroup.querySelector('image');    
+    if (!baseImage) return null;    
+    const IMAGE_SRC = baseImage.getAttribute('href') || baseImage.getAttribute('xlink:href');    
+    const IMAGE_WIDTH = parseFloat(baseImage.getAttribute('width'));    
+    const IMAGE_HEIGHT = parseFloat(baseImage.getAttribute('height'));    
+    if (isNaN(IMAGE_WIDTH) || isNaN(IMAGE_HEIGHT)) return null;    
+    return { src: IMAGE_SRC, width: IMAGE_WIDTH, height: IMAGE_HEIGHT };    
+  }   
   
-// ⬅️ دالة التفعيل الجديدة (من الكود اللي مفهوش رعشة)
-function applyHover(rect){
-    if(touchScrolling) return;
-    
-    // ⬅️ إلغاء المؤقت لو دخلنا تاني (يمنع الرعشة)
-    if(leaveTimer) clearTimeout(leaveTimer);
-
-    if(activeState.rect === rect) return; 
-    
-    clearHover();
-
-    activeState.rect = rect;
-    const clipPathId = "clip-" + Date.now();
-    activeState.clipPathId = clipPathId;
-
-    const parentDay = rect.closest('g');
-    const parentWeek = rect.closest('svg > g[transform^="translate"]');
-    const imageData = getGroupImage(parentWeek);
-    
-    if(!imageData) return;
-
-    const rx = +rect.getAttribute('x');
-    const ry = +rect.getAttribute('y');
-    const rw = +rect.getAttribute('width');
-    const rh = +rect.getAttribute('height');
-
-    const wx = getTransformX(parentWeek);
-    const dx = getTransformX(parentDay);
-
-    const absX = rx + wx + dx;
-    const absY = ry; // الـY في الكود الأول (المجموعة الأم) بصفر
-
-    // 1. تحديد منطقة القطع (clipPath)
-    const clipPath = document.createElementNS("http://www.w3.org/2000/svg","clipPath");
-    clipPath.setAttribute("id", clipPathId);
-    const clipRect = document.createElementNS("http://www.w3.org/2000/svg","rect");
-    clipRect.setAttribute("x", absX);
-    clipRect.setAttribute("y", absY);
-    clipRect.setAttribute("width", rw);
-    clipRect.setAttribute("height", rh);
-    clipDefs.appendChild(clipPath).appendChild(clipRect);
-    
-    // 2. إنشاء صورة الـ Zoom
-    const zoom = document.createElementNS("http://www.w3.org/2000/svg","image");
-    zoom.setAttribute("href", imageData.src);
-    zoom.setAttribute("width", imageData.width);
-    zoom.setAttribute("height", imageData.height);
-    zoom.setAttribute("x", wx);
-    zoom.setAttribute("y", 0);
-    zoom.setAttribute("clip-path", `url(#${clipId})`);
-    zoom.setAttribute('class','zoom-part'); // إضافة الكلاس الجديد
-
-    svg.appendChild(zoom);
-    activeState.zoomPart = zoom;
-
-    // 3. تطبيق التكبير
-    const cx = absX + rw/2;
-    const cy = absY + rh/2;
-    
-    rect.style.transformOrigin = `${rx + rw/2}px ${ry + rh/2}px`; // التكبير من مركز المستطيل
-    rect.style.transform = `scale(${SCALE_AMOUNT})`;
-    rect.style.strokeWidth = "3.5";
-
-    zoom.style.transformOrigin = `${cx}px ${cy}px`;
-    zoom.style.transform = `scale(${SCALE_AMOUNT})`;
-    zoom.style.opacity = 1;
-    
-    // 4. تأثير الـ Glow والـ Animation
-    let hue = 0;  
-    const animationId = setInterval(() => {  
-        hue = (hue + 1) % 360;  
-        const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;  
-        rect.style.filter = glow;  
-        if(zoom) zoom.style.filter = glow;  
-    }, 100);  
-    activeState.animationId = animationId;
-  }
+  function cleanupHover() {    
+    if (!activeState.rect) return;    
+    if(activeState.animationId) clearInterval(activeState.animationId);    
+    activeState.rect.style.transform = 'scale(1)';    
+    activeState.rect.style.filter = 'none';    
+    activeState.rect.style.strokeWidth = '2px';   
+    if(activeState.zoomPart){ activeState.zoomPart.remove(); }    
+    const currentClip = document.getElementById(activeState.clipPathId);    
+    if(currentClip) currentClip.remove();    
+    activeState.rect = null;    
+    activeState.zoomPart = null;    
+    activeState.animationId = null;    
+    activeState.clipPathId = null;    
+  }  
   
-function activateRects(){
-    svg.querySelectorAll('rect.image-mapper-shape').forEach((rect, i)=>{
-      if(rect.dataset.ready) return;
-      rect.dataset.ready = true;
-
-      // ⬅️ استخدام mouseenter/mouseleave مع التأخير
-      rect.addEventListener("mouseenter",()=>applyHover(rect));
-      rect.addEventListener("mouseleave",()=>{
-          // ⬅️ تطبيق التأخير عند الخروج (يمنع الرعشة)
-          leaveTimer = setTimeout(clearHover, 100); 
-      });
-
-      rect.addEventListener("touchstart",(e)=>{
-        e.preventDefault(); 
-        applyHover(rect);
-      });
-      rect.addEventListener("touchend",(e)=>{
-        const link = rect.closest('a').getAttribute('href');
-        if(link && link !== '#'){
-          window.location.href = link;
-        }
-        setTimeout(clearHover, 100); 
-      });
-    });
-  }
-  activateRects();
- const obs = new MutationObserver(()=>activateRects());
-  obs.observe(svg,{childList:true,subtree:true});
-function updateLinkTargets(){
-    const mobile = matchMedia('(hover: none)').matches;
-    svg.querySelectorAll('a').forEach(a=>{
-      if(mobile) a.removeAttribute('target');
-      else a.setAttribute('target','_blank');
-    });
-  }
-  updateLinkTargets();
-})();
-</script>
+  function attachHover(rect, i) {    
+    const anchor = rect.closest('a');    
+    const clipPathId = `clip-${i}-${Date.now()}`;    
+    const scale = 1.1;    
+  
+    rect.setAttribute('data-index', i);    
+    rect.addEventListener('mouseover', startHover);    
+    rect.addEventListener('mouseout', stopHover);    
+    rect.addEventListener('touchstart', startHover);    
+    rect.addEventListener('touchend', cleanupHover);    
+    if (anchor) { anchor.removeEventListener('click', cleanupHover); }    
+  
+    function startHover() {    
+      if(activeState.rect === rect) return;    
+      cleanupHover();    
+      activeState.rect = rect;    
+      activeState.clipPathId = clipPathId;    
+  
+      const x = parseFloat(rect.getAttribute('x'));    
+      const y = parseFloat(rect.getAttribute('y'));    
+      const width = parseFloat(rect.getAttribute('width'));    
+      const height = parseFloat(rect.getAttribute('height'));  
+  
+      const dayGroup = rect.closest('g');  
+      const weekGroup = rect.closest('svg > g[transform*="translate"]');   
+  
+      const imageData = getGroupImage(weekGroup);  
+      if (!imageData) return;    
+  
+      const weekOffsetX = getTransformX(weekGroup);  
+      const dayOffsetX = getTransformX(dayGroup);  
+      const weekOffsetY = getTransformY(weekGroup);  
+      const dayOffsetY = getTransformY(dayGroup);  
+      const absoluteX = x + weekOffsetX + dayOffsetX;    
+      const absoluteY = y + weekOffsetY + dayOffsetY;    
+  
+      let clip = document.createElementNS('http://www.w3.org/2000/svg','clipPath');    
+      clip.setAttribute('id', clipPathId);    
+      let clipRect = document.createElementNS('http://www.w3.org/2000/svg','rect');    
+      clipRect.setAttribute('x', absoluteX);    
+      clipRect.setAttribute('y', absoluteY);    
+      clipRect.setAttribute('width', width);    
+      clipRect.setAttribute('height', height);    
+      clipDefs.appendChild(clip).appendChild(clipRect);    
+  
+      const zoomPart = document.createElementNS('http://www.w3.org/2000/svg','image');    
+      zoomPart.setAttribute('href', imageData.src);    
+      zoomPart.setAttribute('width', imageData.width);    
+      zoomPart.setAttribute('height', imageData.height);    
+      zoomPart.setAttribute('class','zoom-part');    
+      zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);  
+  
+      zoomPart.setAttribute('x', weekOffsetX);    
+      zoomPart.setAttribute('y', weekOffsetY);  
+  
+      zoomPart.style.transformOrigin = `${absoluteX + width/2}px ${absoluteY + height/2}px`;    
+      zoomPart.style.opacity = 0;    
+      mainSvg.appendChild(zoomPart);    
+      activeState.zoomPart = zoomPart;   
+  
+      rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`;   
+      rect.style.transform = `scale(${scale})`;    
+      rect.style.strokeWidth = '4px';   
+  
+      zoomPart.style.transform = `scale(${scale})`;    
+      zoomPart.style.opacity = 1;    
+  
+      // تأثير الـ Glow والـ Animation  
+      let hue = 0;    
+      let currentStrokeWidth = 4;  
+      const animationId = setInterval(() => {    
+        hue = (hue + 1) % 360;    
+        const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;    
+        rect.style.filter = glow;    
+        if(zoomPart) zoomPart.style.filter = glow;    
+  
+        currentStrokeWidth = (currentStrokeWidth === 4) ? 3.5 : 4;  
+        rect.style.strokeWidth = `${currentStrokeWidth}px`;   
+  
+      }, 100);    
+      activeState.animationId = animationId;    
+    }    
+  
+    function stopHover(e) {    
+      const targetRect = e ? (e.target.tagName === 'rect' ? e.target : e.target.closest('a')?.querySelector('.image-mapper-shape')) : rect;    
+      if(targetRect === activeState.rect && e.type === 'mouseout'){    
+          cleanupHover();    
+      }    
+    }    
+  }    
+  
+  document.querySelectorAll('rect.image-mapper-shape').forEach((rect, i) => {    
+      rect.setAttribute('data-processed', 'true');    
+      attachHover(rect, i);    
+  });    
+  
+  const rootObserver = new MutationObserver(() => {    
+    document    
+      .querySelectorAll('rect.image-mapper-shape:not([data-processed])')    
+      .forEach((rect, i) => {    
+        rect.setAttribute('data-processed', 'true');    
+        attachHover(rect, i);    
+      });    
+  });    
+  rootObserver.observe(mainSvg, { childList: true, subtree: true });    
+  
+  function setLinkTarget() {    
+    const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0) || (window.innerWidth < 800);    
+    const allLinks = document.querySelectorAll('a[xlink\\:href], a[href]');    
+    allLinks.forEach(link => {    
+      if (isMobile) { link.removeAttribute('target'); }     
+      else { link.setAttribute('target', '_blank'); }    
+    });    
+  }    
+  setLinkTarget();    
+</script> 
 </body>
 </html>
