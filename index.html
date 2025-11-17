@@ -31,9 +31,9 @@
   .image-mapper-shape {
     fill: transparent;
     stroke: yellow;
-    stroke-width: 2px;
+    stroke-width: 2px; /* القيمة الأصلية */
     transform-origin: center center;
-    transition: transform 0.3s ease, filter 0.3s ease;
+    transition: transform 0.3s ease, filter 0.3s ease, stroke-width 0.3s ease; /* إضافة stroke-width للـtransition */
   }
   .q { stroke: red; }
   .v { stroke: blue; }
@@ -55,7 +55,7 @@
     id="main-svg">
     <defs id="clip-defs"></defs>
 
-    <g transform="translate(0,0)" id="main-group">  
+    <g transform="translate(0,0)">  
       <image href="image/1.png" width="1024" height="2454" id="base-image" preserveAspectRatio="xMinYMin meet"/>  
       <a href="micro/1.pdf"><rect x="368" y="703" width="115" height="380" class="image-mapper-shape"/></a>  
       <a href="patho/1.pdf"><rect x="368" y="1083" width="115" height="253.5" class="image-mapper-shape"/></a>  
@@ -69,7 +69,7 @@
       <a href="physio/q/1.pdf"><rect x="598" y="2100" width="115" height="127" class="image-mapper-shape q"/></a>
     </g>  
 
-    <g transform="translate(1024,0)" id="secondary-group">  
+    <g transform="translate(1024,0)">  
       <image href="image/2.png" width="1024" height="2454" id="secondary-image" preserveAspectRatio="xMinYMin meet"/>  
       <a href="#"><rect x="137.73" y="348.2" width="115.4" height="383.8" class="image-mapper-shape"/></a>  
       <a href="ipc/book.pdf"><rect x="137.52" y="875.78" width="114.89" height="348.72" class="image-mapper-shape ipc"></rect></a>  
@@ -120,6 +120,7 @@
     if(activeState.animationId) clearInterval(activeState.animationId);  
     activeState.rect.style.transform = 'scale(1)';  
     activeState.rect.style.filter = 'none';  
+    activeState.rect.style.strokeWidth = '2px'; /* رجوع لسمك الخط الأصلي */
     if(activeState.zoomPart){ activeState.zoomPart.remove(); }  
     const currentClip = document.getElementById(activeState.clipPathId);  
     if(currentClip) currentClip.remove();  
@@ -136,10 +137,10 @@
     const parentGroup = rect.closest('g');  
     const imageData = getGroupImage(parentGroup);  
     if (!imageData) return;  
-    
+
     const groupOffsetX = getTransformX(parentGroup);  
     const groupOffsetY = getTransformY(parentGroup);  
-    
+
     rect.setAttribute('data-index', i);  
     rect.addEventListener('mouseover', startHover);  
     rect.addEventListener('mouseout', stopHover);  
@@ -152,12 +153,12 @@
       cleanupHover();  
       activeState.rect = rect;  
       activeState.clipPathId = clipPathId;  
-      
+
       const x = parseFloat(rect.getAttribute('x'));  
       const y = parseFloat(rect.getAttribute('y'));  
       const width = parseFloat(rect.getAttribute('width'));  
       const height = parseFloat(rect.getAttribute('height'));  
-      
+
       const absoluteX = x + groupOffsetX;  
       const absoluteY = y + groupOffsetY;  
 
@@ -176,7 +177,7 @@
       zoomPart.setAttribute('height', imageData.height);  
       zoomPart.setAttribute('class','zoom-part');  
       zoomPart.setAttribute('clip-path', `url(#${clipPathId})`);  
-      
+
       zoomPart.setAttribute('x', groupOffsetX);  
       zoomPart.setAttribute('y', groupOffsetY);  
 
@@ -184,18 +185,26 @@
       zoomPart.style.opacity = 0;  
       mainSvg.appendChild(zoomPart);  
       activeState.zoomPart = zoomPart;  
-      
+
       rect.style.transformOrigin = `${x + width/2}px ${y + height/2}px`; 
       rect.style.transform = `scale(${scale})`;  
+      rect.style.strokeWidth = '4px'; /* زيادة سمك الخط وقت الـHover */
+
       zoomPart.style.transform = `scale(${scale})`;  
       zoomPart.style.opacity = 1;  
-      
+
       let hue = 0;  
+      let currentStrokeWidth = 4;
       const animationId = setInterval(() => {  
         hue = (hue + 1) % 360;  
         const glow = `drop-shadow(0 0 8px hsl(${hue},100%,55%)) drop-shadow(0 0 14px hsl(${(hue+60)%360},100%,60%))`;  
         rect.style.filter = glow;  
         if(zoomPart) zoomPart.style.filter = glow;  
+        
+        /* تأثير النبض على سمك الخط */
+        currentStrokeWidth = (currentStrokeWidth === 4) ? 3.5 : 4;
+        rect.style.strokeWidth = `${currentStrokeWidth}px`; 
+
       }, 100);  
       activeState.animationId = animationId;  
     }  
